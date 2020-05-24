@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "../GL/AttachGL.h"
 #include "../GL/VAO.h"
+#include "../GL/ShadersProgram.h"
 #include <stdexcept>
 
 Window::Window(const std::string& title, int width, int height)
@@ -34,10 +35,16 @@ void Window::loop()
 	 1.0f, -1.0f, 0.0f,
 	 0.0f,  1.0f, 0.0f
 		});
+
+	// Инициализация шейдеров
+	GL::ShadersProgram shader("first");
+	shader.bindAttribute(0, "position");
+	shader.link();
+	shader.use();
 	
 	// Рисуем всё в цикле, пока окно существует
 	while (!glfwWindowShouldClose(mWindow)) {
-		glClearColor(0.3, 0, 0, 1);
+		glClearColor(0, 0, 0, 1); // rgba
 		glClear(GL_COLOR_BUFFER_BIT);
 		vao.draw(3);
 		glfwSwapBuffers(mWindow);

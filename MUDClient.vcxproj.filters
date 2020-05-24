@@ -48,4 +48,8 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\glsl\first.frag" />
+    <None Include="res\glsl\first.vert" />
+  </ItemGroup>
 </Project>
