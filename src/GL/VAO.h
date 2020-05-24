@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "AttachGL.h"
+#include "../glm/glm.hpp"
 
 namespace GL
 {
@@ -17,6 +18,9 @@ namespace GL
 		void bind();
 		void draw(GLsizei count);
 		void addVertexBufferObject(const std::vector<float>& data);
+		void addVertexBufferObject(const std::vector<glm::vec2>& data);
+		void addVertexBufferObject(const std::vector<glm::vec3>& data);
+		void addVertexBufferObject(const std::vector<glm::vec4>& data);
 		~VAO();
 	};
 }

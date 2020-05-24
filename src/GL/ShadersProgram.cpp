@@ -6,32 +6,32 @@
 GL::ShadersProgram::ShadersProgram(const std::string& name)
 {
 	mProgram = glCreateProgram();
-	// Загрузка двух шейдеров - вершинного и фрагментного
+	// Р—Р°РіСЂСѓР·РєР° РґРІСѓС… С€РµР№РґРµСЂРѕРІ - РІРµСЂС€РёРЅРЅРѕРіРѕ Рё С„СЂР°РіРјРµРЅС‚РЅРѕРіРѕ
 	mVertexShader = loadShader("res/glsl/" + name + ".vert", GL_VERTEX_SHADER);
 	mFragmentShader = loadShader("res/glsl/" + name + ".frag", GL_FRAGMENT_SHADER);
 }
 
-// Загрузка шейдера из файла с заданным типом
+// Р—Р°РіСЂСѓР·РєР° С€РµР№РґРµСЂР° РёР· С„Р°Р№Р»Р° СЃ Р·Р°РґР°РЅРЅС‹Рј С‚РёРїРѕРј
 GLuint GL::ShadersProgram::loadShader(const std::string& path, GLenum shaderType)
 {
 	GLuint shader = glCreateShader(shaderType);
 
-	// Загрузка кода шейдера из файла
+	// Р—Р°РіСЂСѓР·РєР° РєРѕРґР° С€РµР№РґРµСЂР° РёР· С„Р°Р№Р»Р°
 	std::ifstream fis(path);
 	std::string shaderCode = { std::istreambuf_iterator<char>(fis), std::istreambuf_iterator<char>() };
 
-	// Экспорт кода шейдера в OpenGL
+	// Р­РєСЃРїРѕСЂС‚ РєРѕРґР° С€РµР№РґРµСЂР° РІ OpenGL
 	const char* ch = shaderCode.c_str();
-	// Да, тут всё правильно - передаём указатель на указатель (char**)
+	// Р”Р°, С‚СѓС‚ РІСЃС‘ РїСЂР°РІРёР»СЊРЅРѕ - РїРµСЂРµРґР°С‘Рј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СѓРєР°Р·Р°С‚РµР»СЊ (char**)
 	glShaderSource(shader, 1, &ch, nullptr);
 
-	// Получить результат компиляции
+	// РџРѕР»СѓС‡РёС‚СЊ СЂРµР·СѓР»СЊС‚Р°С‚ РєРѕРјРїРёР»СЏС†РёРё
 	GLint status;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 	char buf[0x1000];
 	GLsizei len;
 
-	// Если какие-то записи в логе есть, выводим их в консоль
+	// Р•СЃР»Рё РєР°РєРёРµ-С‚Рѕ Р·Р°РїРёСЃРё РІ Р»РѕРіРµ РµСЃС‚СЊ, РІС‹РІРѕРґРёРј РёС… РІ РєРѕРЅСЃРѕР»СЊ
 	glGetShaderInfoLog(shader, sizeof(buf), &len, buf);
 	if (len > 0) {
 		std::cout << "Failed to load shader '" << path << "': " << std::endl;
@@ -41,7 +41,7 @@ GLuint GL::ShadersProgram::loadShader(const std::string& path, GLenum shaderType
 	return shader;
 }
 
-// Линковка шейдеров. Происходит строго после объявления всех атрибутов.
+// Р›РёРЅРєРѕРІРєР° С€РµР№РґРµСЂРѕРІ. РџСЂРѕРёСЃС…РѕРґРёС‚ СЃС‚СЂРѕРіРѕ РїРѕСЃР»Рµ РѕР±СЉСЏРІР»РµРЅРёСЏ РІСЃРµС… Р°С‚СЂРёР±СѓС‚РѕРІ.
 void GL::ShadersProgram::link()
 {
 	glAttachShader(mProgram, mVertexShader);
@@ -49,7 +49,7 @@ void GL::ShadersProgram::link()
 	glLinkProgram(mProgram);
 }
 
-// Активация текущей шейдерной программы
+// РђРєС‚РёРІР°С†РёСЏ С‚РµРєСѓС‰РµР№ С€РµР№РґРµСЂРЅРѕР№ РїСЂРѕРіСЂР°РјРјС‹
 void GL::ShadersProgram::use()
 {
 	glUseProgram(mProgram);
@@ -58,6 +58,16 @@ void GL::ShadersProgram::use()
 void GL::ShadersProgram::bindAttribute(GLuint index, const std::string& name)
 {
 	glBindAttribLocation(mProgram, index, name.c_str());
+}
+
+void GL::ShadersProgram::setFloat(const std::string& name, float value)
+{
+	glUniform1f(getLocation(name), value);
+}
+
+GLint GL::ShadersProgram::getLocation(const std::string& name)
+{
+	return glGetUniformLocation(mProgram, name.c_str());
 }
 
 GL::ShadersProgram::~ShadersProgram()

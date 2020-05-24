@@ -3,10 +3,10 @@
 
 GL::VAO::VAO()
 {
-	// Генерируем массив вершин
+	// Р“РµРЅРµСЂРёСЂСѓРµРј РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ
 	glGenVertexArrays(1, &mVao);
-	// Обязательно сразу связываем его с GL,
-	// иначе на видеокартах NVidia получим AV при попытке отрисовать массивы вершин
+	// РћР±СЏР·Р°С‚РµР»СЊРЅРѕ СЃСЂР°Р·Сѓ СЃРІСЏР·С‹РІР°РµРј РµРіРѕ СЃ GL,
+	// РёРЅР°С‡Рµ РЅР° РІРёРґРµРѕРєР°СЂС‚Р°С… NVidia РїРѕР»СѓС‡РёРј AV РїСЂРё РїРѕРїС‹С‚РєРµ РѕС‚СЂРёСЃРѕРІР°С‚СЊ РјР°СЃСЃРёРІС‹ РІРµСЂС€РёРЅ
 	bind();
 };
 
@@ -18,32 +18,69 @@ void GL::VAO::bind()
 void GL::VAO::draw(GLsizei count)
 {
 
-	// Связываем текущий массив вершин с GL
+	// РЎРІСЏР·С‹РІР°РµРј С‚РµРєСѓС‰РёР№ РјР°СЃСЃРёРІ РІРµСЂС€РёРЅ СЃ GL
 	bind();
 	
-	// Загружаем в память видеокарты массив атрибутов вершин
+	// Р—Р°РіСЂСѓР¶Р°РµРј РІ РїР°РјСЏС‚СЊ РІРёРґРµРѕРєР°СЂС‚С‹ РјР°СЃСЃРёРІ Р°С‚СЂРёР±СѓС‚РѕРІ РІРµСЂС€РёРЅ
 	for (size_t i = 0; i < mBuffers.size(); i++) {
 		glEnableVertexAttribArray(i);
 	}
 
-	// Рисуем
+	// Р РёСЃСѓРµРј
 	glDrawArrays(GL_TRIANGLES, 0, count);
 
-	// Выгружаем вершины из памяти
+	// Р’С‹РіСЂСѓР¶Р°РµРј РІРµСЂС€РёРЅС‹ РёР· РїР°РјСЏС‚Рё
 	for (size_t i = 0; i < mBuffers.size(); i++) {
 		glDisableVertexAttribArray(i);
 	}
 
 }
 
+// 1-РєРѕРјРїРѕРЅРµРЅС‚РЅС‹Р№ РјР°СЃСЃРёРІ
 void GL::VAO::addVertexBufferObject(const std::vector<float>& data)
 {
-	// Создаём в массиве вершин новый объект (треугольник)
+	// РЎРѕР·РґР°С‘Рј РІ РјР°СЃСЃРёРІРµ РІРµСЂС€РёРЅ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ (С‚СЂРµСѓРіРѕР»СЊРЅРёРє)
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(mBuffers.size(), 1, GL_FLOAT, GL_FALSE, 0, nullptr);
+	mBuffers.push_back(vbo);
+}
+
+// 2-РєРѕРјРїРѕРЅРµРЅС‚РЅС‹Р№ РјР°СЃСЃРёРІ
+void GL::VAO::addVertexBufferObject(const std::vector<glm::vec2>& data)
+{
+	// РЎРѕР·РґР°С‘Рј РІ РјР°СЃСЃРёРІРµ РІРµСЂС€РёРЅ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ (С‚СЂРµСѓРіРѕР»СЊРЅРёРє)
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(glm::vec2), data.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(mBuffers.size(), 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	mBuffers.push_back(vbo);
+}
+
+// 3-РєРѕРјРїРѕРЅРµРЅС‚РЅС‹Р№ РјР°СЃСЃРёРІ
+void GL::VAO::addVertexBufferObject(const std::vector<glm::vec3>& data)
+{
+	// РЎРѕР·РґР°С‘Рј РІ РјР°СЃСЃРёРІРµ РІРµСЂС€РёРЅ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ (С‚СЂРµСѓРіРѕР»СЊРЅРёРє)
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(glm::vec3), data.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(mBuffers.size(), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	mBuffers.push_back(vbo);
+}
+
+// 4-РєРѕРјРїРѕРЅРµРЅС‚РЅС‹Р№ РјР°СЃСЃРёРІ
+void GL::VAO::addVertexBufferObject(const std::vector<glm::vec4>& data)
+{
+	// РЎРѕР·РґР°С‘Рј РІ РјР°СЃСЃРёРІРµ РІРµСЂС€РёРЅ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ (С‚СЂРµСѓРіРѕР»СЊРЅРёРє)
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(glm::vec4), data.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(mBuffers.size(), 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 	mBuffers.push_back(vbo);
 }
 

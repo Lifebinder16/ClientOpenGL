@@ -3,8 +3,8 @@
 #include <string>
 #include "../GL/AttachGL.h"
 
-// В терминологии OpenGL группа различных связанных шейдеров называется "Program",
-// поэтому и класс будет называться также.
+// Р’ С‚РµСЂРјРёРЅРѕР»РѕРіРёРё OpenGL РіСЂСѓРїРїР° СЂР°Р·Р»РёС‡РЅС‹С… СЃРІСЏР·Р°РЅРЅС‹С… С€РµР№РґРµСЂРѕРІ РЅР°Р·С‹РІР°РµС‚СЃСЏ "Program",
+// РїРѕСЌС‚РѕРјСѓ Рё РєР»Р°СЃСЃ Р±СѓРґРµС‚ РЅР°Р·С‹РІР°С‚СЊСЃСЏ С‚Р°РєР¶Рµ.
 
 namespace GL 
 {
@@ -15,10 +15,12 @@ namespace GL
 		GLuint mVertexShader;
 		GLuint mFragmentShader;
 		GLuint loadShader(const std::string& path, GLenum shaderType);
+		GLint getLocation(const std::string& name);
 	public:
 		ShadersProgram(const std::string& name);
 		void link();
 		void bindAttribute(GLuint index, const std::string& name);
+		void setFloat(const std::string& name, float value);
 		void use();
 		~ShadersProgram();
 	};
