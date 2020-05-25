@@ -7,7 +7,7 @@ int main()
 
 	try {
 		GLFW glfw;
-		Window w("MUDClient", 800, 600);
+		Window w("Client3D", 800, 600);
 		w.loop();
 	}
 	catch (const std::runtime_error& e) {
